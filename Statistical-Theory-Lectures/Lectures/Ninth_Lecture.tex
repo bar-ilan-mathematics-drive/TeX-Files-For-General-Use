@@ -1,0 +1,97 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+\subsection{Multidimensional Cramer-Rao Bound}
+When we first talked about this bound we had the case of the one-dimensional bound. Now we will consider the multi-dimensional case. For this assume that the parameter space is p-dimensional. Now define the Fischer information matrix to be a p-dimensional matrix - 
+\[\forall\text{ }j,k: \left(I(\theta)\right)_{j,k} = \mathbb{E}_\theta\left[\left(\frac{d}{d\theta_j}\log f_{\overrightarrow{\theta}}(\overrightarrow{y})\right)\cdot\left(\frac{d}{d\theta_j}\log f_{\overrightarrow{\theta}}(\overrightarrow{y})\right)\right]\]
+\begin{theorem}[Cramer-Rao Bound]
+Assume the sampling $\overrightarrow{Y}$ has joint density function $f_{\overrightarrow{\theta}}(\overrightarrow{y})$. Assume $\Theta$ is p-dimensional, and that the following conditions all occur - \\\\
+(1). The support of the joint density function is independent of the choice of $\theta$. \\\\
+(2). The following equalities occur always - 
+\[\forall \text{ } 1\leq j\leq p: \frac{d}{d\theta_j}\int T(\overrightarrow{y})f_{\theta}(\overrightarrow{y})d\overrightarrow{y} = \int T(\overrightarrow{y})\frac{d}{d\theta_j} f_{\theta}(\overrightarrow{y})d\overrightarrow{y}\]
+Let T be an unbiased estimator for a scalar function $g:\mathbb{R}^p\rightarrow\mathbb{R}$, with finite variance. Then we have
+\[\text{Var}(T)\geq \left(\frac{dg(\overrightarrow{\theta})}{d\overrightarrow{\theta}}\right)^T \cdot \left(I(\theta)\right)^{-1}\cdot \left(\frac{dg(\overrightarrow{\theta})}{d\overrightarrow{\theta}}\right)\]
+\[\left(
+\text{Where     }\frac{dg(\overrightarrow{\theta})}{d\overrightarrow{\theta}}:=\left(\frac{dg(\overrightarrow{\theta})}{d\theta_1},\dots, \frac{dg(\overrightarrow{\theta})}{d\theta_p}\right)\right)\]
+\end{theorem}
+\begin{proof}
+We will skip this proof, this is a generalization of the one-dimensional proof. 
+\end{proof}
+Note that when the samplings are i.i.d. we can again define $I^*(\theta)$ and get that
+\[I(\theta) = n\cdot I^*(\theta)\]
+Additionally if there is a second derivative and integration and second differentiation can switch we have that 
+\[I(\theta) = \mathbb{E}\left[\frac{d^2}{d\overrightarrow{\theta}(d\overrightarrow{\theta})^T} \log f_{\overrightarrow{\theta}}(\overrightarrow{y})\right]\]
+\begin{example}
+Consider a i.i.d. sampling of normal distributions $\mathcal{N}(\mu,\sigma^2)$. As we have previously calculated
+\[I_{(\mu,\mu)} = \frac{n}{\sigma^2}, \text{ } I_{(\sigma,\sigma)} = \frac{2n}{\sigma^2}\]
+Now we want to calculate $I_{(\mu,\sigma)}$, what we want therefore is -
+\[\frac{d^2}{d\mu d\sigma} \log f(y) = \frac{d^2}{d\mu d\sigma}\left( -\log \sqrt{2\pi} - \log\sigma -\frac{(y-\mu)^2}{2\sigma^2}\right) = \dots = -\frac{2(y-\mu)}{\sigma^3}\]
+Meaning
+\[I^*_{(\mu,\theta)} = \mathbb{E}\left[-\frac{2(y-\mu)}{\sigma^3}\right] = 0\]
+Alltogether we have
+\[I(\overrightarrow{\theta}) = \begin{bmatrix} \frac{n}{\sigma^2} & 0 \\ 0 & \frac{2n}{\sigma^2}  \end{bmatrix}\]
+\end{example}
+\subsection{Approaching UMVUE}
+\begin{theorem}[Blackwell-Rao Theorem]
+Let T be an unbiased estimator for $\theta$, and W be a sufficient statistic for $\theta$. Now define
+\[T_1 := \mathbb{E}[T\mid W]\]
+We have the following happen:\\\\
+(1). $T_1$ is an unbiased estimator for $\theta$. \\\\
+(2). $\text{Var}(T_1)\leq\text{Var}(T_2)$. \\\\
+Note that the sufficiency of W is necessary for $T_1$ to even be a statistic - since W is a sufficient statistic we have that $T\mid W$ is independent of the parameters and so $T_1$ is also independent of the parameters which tells us that it is a statistic 
+\end{theorem}
+\begin{proof}
+We can show that $T_1$ is in fact unbiased and that is because - 
+\[\mathbb{E}[T_1] = \mathbb{E}[\mathbb{E}[T\mid W]] = \mathbb{E}[T] = \theta\]
+Now we want to compare the variances - 
+\[\text{Var}(T) = \text{Var}\left(\mathbb{E}[T\mid W]\right) + \mathbb{E}\left[\text{Var}(T\mid W)\right] = \text{Var}(T_1) + \mathbb{E}[\text{Var}(T\mid W)]\geq \text{Var}(T_1)\]
+And so we are done. 
+\end{proof}
+Notice that this means that if $\text{Var}(T\mid W)$ is non-zero at least sometimes that means that the inequality turns to a strict inequality. Also you can see that it might be wise to pick W to be a minimal sufficient statistic. Also note that the process stops after one iteration because of how conditional expected value works.  
+\begin{claim}
+$T_1 = T$ if and only if T is a function of W. (with probability 1)
+\end{claim}
+This is a result using the proof of the previous theorem
+\begin{example}
+Take $Y_i\sim\text{Ber}(p)$ i.i.d., we know that $\sum_i y_i$ is a sufficient statistic, and take $T=Y_1$. Now let's apply the theorem - 
+\[T_1\mathbb{E}\left[Y_1\mid \sum_i Y_i\right] = 1\cdot \mathbb{P}\left(Y_1=1\mid \sum_i Y_i\right) + 0\cdot \mathbb{P}\left(Y_i=0 \mid \sum_i Y_i\right) = \frac{\sum_i Y_i}{n} = \bar{Y}\]
+Which is the UMVUE for this distribution. 
+\end{example}
+What are the weaknesses of this process? \\\\
+(1). It can be hard to find an initial unbiased estimate. \\\\
+(2). It is sometimes very hard to evaluate $\mathbb{E}[T\mid W]$\\\\
+\begin{example}
+When it comes to earthquakes, the number of earthquakes in a large enough interval time usually models as a Poisson distribution. Therefore if we have i.i.d. samples $Y_i\sim\text{Poi}(\lambda)$, we will be interested in estimating - 
+\[\mathbb{P}(Y\geq 1) = 1-e^{-\lambda}\]
+Which is the probability that an earthquake happens in that interval of time. We have seen previously that for poisson distributions $\sum_i Y_i$ is a sufficient statistic. Now define an T to be an indicator function in the following way - 
+\[T := \begin{cases} 1, & Y_1\geq 1 \\ 0, & \text{Otherwise} \end{cases}\]
+Obviously T is an unbiased estimator for the event $\{Y\geq 1\}$. \\\\
+Now we can apply he process from the theorem. And so
+\[T_1:= \mathbb{E}[T\mid W] = 1\cdot \mathbb{P}\left(Y_1\geq 1\mid \sum_i Y_i =k\right) + 0 \cdot \dots = 1-\mathbb{P}\left(Y_i =0\mid \sum_i Y_i =k\right) =\]\[= 1-\frac{\mathbb{P}(Y_i=0, \sum_i Y_i = k)}{\mathbb{P}(\sum_i Y_i = k )} = 1 - \frac{\mathbb{P}(Y_1=0)\mathbb{P}(\sum_{i=2}^n Y_i = k)}{\mathbb{P}(\sum_i Y_i =k)} = 1-\frac{e^{-\lambda}\cdot e^{-(n-1)\lambda}\cdot \frac{((n-1)\lambda)^k}{k!}}{e^{-n\lambda}\cdot \frac{(n\lambda)^k}{k!}} =\]\[= 1-\left(\frac{n-1}{n}\right)^{\sum_i Y_i}\]
+This is obviously not a trivial choice for an estimator. If we would have used MLE we would have gotten that the estimator would be 
+\[1-e^{-\bar{Y}} = 1 - e^{-\frac{\sum_i Y_i}{n}}\]
+Notice that these are very very close, where what we found is a UMVUE but the second one isn't necessarily even unbiased. And so it remains to see which one is "better". 
+\end{example}
+\subsection{Lehmann-Scheffe Theorem}
+\begin{claim}
+If W is a complete statistic then there is at most 1 (with probability 1) unbiased estimators for $g(\theta)$ that is a function of W 
+\end{claim}
+\begin{proof}
+By definition of completeness, just expand and get what you want.
+\end{proof}
+\begin{theorem}[Lehmann - Scheffe]
+If W is a sufficient and complete statistic for $\theta$, and T is an unbiased estimator then 
+\[T_1 = \mathbb{E}[T\mid W]\]
+Is a UMVUE for $\theta$. 
+\end{theorem}
+\begin{proof}
+From Blackwell-Rao theorem we have that $T_1$ is an unbiased estimator for $\theta$. Now we need to show that its variance is minimal. Let S be an unbiased estimator for $\theta$. We know that 
+\[\text{Var}(\mathbb{E}[S\mid W])\leq\text{Var}(S)\]
+Obviously $\mathbb{E}[S\mid W]$ is a function of W and so this has to be $T_1$ (with probability 1) which tells us that $T_1$ has a lower variance. 
+\end{proof}
+\begin{example}
+Consider the estimator $\hat{s^2}$ as an estimator in a normal distribution. We have seen that
+\[W:=\left(\bar{Y}, \sum_i (Y_i-Y)^2\right)\]
+is a complete and sufficient statistic for $\mu,\sigma^2$. (we have seen sufficient, completeness can be seen by hand similar to things in the past). Obviously $\hat{s^2}$ is a function of W and so it is a UMVUE. 
+\end{example}
+\end{document}

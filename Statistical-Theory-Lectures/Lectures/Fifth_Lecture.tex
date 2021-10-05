@@ -1,0 +1,84 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+\subsection{Maximum Likelihood Estimation}
+Given the likelihood function it is natural to try and find the coefficients that maximize the likelihood function.
+\begin{example}
+An MLE (Maximum Likelihood Estimation) is an estimator $\hat{\theta}_{\text{MLE}}$ such that
+\[\hat{\theta}_{\text{MLE}} = \text{argmax}_{\theta\in\Theta} L(\theta;\overrightarrow{y})\] \end{example}
+Often there is an assumption of the samples being i.i.d. and therefore the likelihood is a multiplication. This is then translated to a sum by applying a logarithm function to both sides and solving that minimization problem. 
+\begin{example} 
+given a bernoulli distribution $\text{Be}(p)$ we know that - 
+\[L(p;\overrightarrow{y}) = p^{\sum_i y_i}(1-p)^{n-\sum_i y_i}\]
+And so applying the logarithm we get 
+\[l(p;\overrightarrow{y}) = \log p\left(\sum_i y_i\right) + \log(1-p)\left(n-\sum_i y_i\right)\]
+Finding the minimum of this gives the following natural result \[\hat{\theta}_{\text{MLE}} = \frac{\sum_i y_i}{n}=\bar{y}\]
+\end{example}
+\begin{example}
+Given a uniform distribution where the density is
+\[f_Y(y):=\begin{cases} \frac{1}{\theta}, & 0\leq y \leq\theta \\ 0, & \text{Otherwise}\end{cases}\]
+The likelihood function will be \[L(\theta;y)\begin{cases} \frac{1}{\theta^n}, & \max{\{y\}} \leq\theta \\ 0, & \text{Otherwise}\end{cases}\]
+And so the MLE estimator will be $\max\{y\}$
+\end{example}
+\newpage
+\begin{example} Assume $Y_i\sim\mathcal{U}[\theta,\theta+1]$ i.i.d.
+Meaning \[f_Y(y):=\begin{cases} 1, & \theta\leq y \leq\theta+1 \\ 0, & \text{Otherwise}\end{cases}\]
+And so the likelihood function - 
+\[L(\theta;y)\begin{cases} 1, & \max{\{y\}}-1\leq\theta\leq\min{\{y\}} \\ 0, & \text{Otherwise}\end{cases}\]
+Meaning in this case the solution is not unique - any theta that satisfies that the above function is 1 will give us a solution. \end{example}
+\begin{example} Given $t_1,\dots,t_n\sim\text{Exp}(\theta)$ i.i.d.
+It is known that
+\[f_\theta(t) = \theta\cdot e^{-\theta t}\]
+And so 
+\[L(\theta;\overrightarrow{y}) = \theta^n e^{-\theta\sum_i t_i}\]
+Applying the logarithm we get 
+\[l(\theta;\overrightarrow{y})=n\log(\theta)-\theta\sum_i t_i\]
+Finding the minimum in the obvious way will give us that the MLE will $\frac{n}{\sum_i t_i} = \bar{t}^{-1}$\end{example}
+\begin{definition} Given a function g on the parameter space we define the likelihood for $z=g(\theta)$ to be 
+\[L_{(z)}(z;\overrightarrow{y}) = \sup_{\{\theta:g(\theta)=z\}} L_{(\theta)}(\theta;\overrightarrow{y})\]
+\end{definition}
+\begin{claim} Given such a function g, and the MLE $\hat{\theta}$ then a MLE for z is 
+\[\hat{z}_{MLE}=g(\hat{\theta})\]
+The proof for this is quite straightforward. \\\\
+Therefore we know that the MLE is a function of every sufficient statistic. This can be seen through the fact that you can use Fischer-Neyman decomposition, and get rid of the part that is solely dependent on the sampling to get that the MLE is \[\text{argmax}_\theta L(\theta;\overrightarrow{y})=\text{argmax}_\theta g(T(\overrightarrow{y}),\theta)\]
+\end{claim}
+\newpage
+\subsection{Method Of Moment Estimator}
+Given a random variable you can calculate the moments
+\[\mu_k(\theta):= \mathbb{E}\left[Y^k\right]\]
+Now for a sampling we can define the moment of this sampling to be -
+\[M_k:=\frac{1}{n}\sum_{i=1}^n y_i^k\]
+Now it is natural to demand that the most accurate $\theta$ will agree with the moment sampling. Meaning we will have a system of equations - 
+\[M_k:=\mu_k(\theta)\]
+To get $\hat{\theta}_{\text{MME}}$
+\begin{example}
+Assume the sampling is from a normal distribution $\mathcal{N}(\mu,\sigma^2)$ i.i.d.\\\\
+This means the equations we get are
+\[\hat{\mu}_{\text{MME}}=\frac{1}{n}\sum_i y_i\]
+\[\hat{\mu}_{\text{MME}}^2+\hat{\sigma}_{\text{MME}}^2 = \frac{1}{n}\sum_i y_i^2\]
+The second equation can be shortened using the first one to get that $\hat{\sigma}_{\text{MME}}^2$ is just the variance of the sampling. \end{example}
+\begin{example} Assume $Y\sim\mathcal{U}[o,\theta]$. And so we have \[\mathbb{E}[Y]=\frac{\theta}{2} \]
+And so MME will give us 
+\[\hat{\theta}_{\text{MME}}=\frac{1}{2n}\sum_i y_i=2\bar{y}\]
+\end{example}
+\newpage
+\subsection{Comparison between estimators}
+\begin{definition}
+Given an estimator $\hat{\theta}$ we define the Mean-Square-Error \[MSE(\hat{\theta})=\mathbb{E}_{\theta}\left[(\hat{\theta}-\theta)^2\right]\]
+\end{definition}
+It can be seen (similar to how you calculate variance of a random variable) that this is equal to - 
+\[\text{bias}^2(\hat{\theta})+\text{Var}(\hat{\theta})\]
+Where the bias is 
+\[\text{bias}(\hat{\theta}):=\theta-\mathbb{E}[\hat{\theta}]\]
+\begin{definition} An estimate $\hat{\theta}$ such that $\text{bias}(\hat{\theta})=0$ for all estimators $\theta$ is called un-biased \end{definition}
+\begin{example} Assume $Y_i\sim f_{\theta}(\overrightarrow{y})$ i.i.d.
+We want to estimate the expected value, using MME we will just guess the average of the sampling. Using linearity of expected value, the average of the sampling is always unbiased. Therefore for the MSE we need only calculate the Variance -
+\[\text{Var}(\bar{Y}) = \frac{1}{n^2}\sum_i Var(Y_i) = \frac{\sigma^2}{n}\]
+Meaning that overall
+\[MSE(\bar{Y}) = \frac{\sigma^2}{n}\]
+Another option for example would be to estimate the expected value by taking the first sample only. This will also be unbiased. And again we only need the variance. When we check the variance we will see that
+\[\text{Var}(Y_1) = \sigma^2\]
+And so 
+\[\text{MSE}(Y_1) = \sigma^2\]
+\end{example}
+\end{document}

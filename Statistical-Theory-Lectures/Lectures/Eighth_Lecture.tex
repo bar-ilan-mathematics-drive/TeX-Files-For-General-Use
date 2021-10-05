@@ -1,0 +1,66 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+Last lecture we saw that with a normal distribution, any unbiased estimate of the variance has 
+\[\text{MSE}(T)\geq \frac{2\sigma^4}{n}\]
+We now want to see how the unbiased estimator for the variance we have found in the past, $\hat{s^2}$, compares with this. 
+Notice that since $Y_i$ is a normal distribution, and the average is also a normal distribution (since the samples are independent) then $Y_i-\bar{Y}$ is also a normal distribution. And so
+\[\sum_i \left(Y_i-\bar{Y}\right)^2 \sim \sigma^2 \chi^2_{n-1}\]
+It is known that when $Z\sim\chi_k^2$ the variance is 2k. And so 
+\[\text{Var}(\hat{s^2}) = \left(\frac{\sigma^2}{n-1}\right)^2\cdot 2(n-1) = \frac{2\sigma^4}{n-1}\]
+And so this doesn't achieve the lower bound that the Cramer Rao bound achieves so we can't immediately know whether this is or isn't a UMVUE for the variance (It is, this has to be proved in a different or more specific way). \\\\
+\subsection{The Family Of Exponential Distributions}
+\begin{definition}
+Assuming the coefficient space $\Theta$ is an open interval. \\\\
+We say that a distribution $f_\theta(\overrightarrow{y})$ is in the family of exponential distribution if and only if all of the following happen - \\\\
+(1). The support of the $f_\theta(\overrightarrow{y})$ is independent of the choice of $\theta$. \\\\
+(2). The density can be written in the following way
+\[f_\theta(\overrightarrow{y}) := \begin{cases} \exp(c(\theta)T(\overrightarrow{y})+d(\theta)+ s(\overrightarrow{y})) , & \overrightarrow{y}\in\text{Supp} \\ 0 , & \text{ Otherwise}\end{cases}\]
+\end{definition}
+$c(\theta)$ in the above definition is called the natural parameter of the distribution. \\\\
+Notice that this isn't a definition that is hard to extend to discrete distributions. \newpage
+\begin{example}
+We can take the exponential distribution -
+\[f_\theta(\overrightarrow{y}):= \theta e^{-\theta t}, \text{ for } \theta\in [0,\infty)\]
+Notice that the support is all non-negative numbers and is therefore independent of $\theta$. And it is easy to verify that this distribution can be written in the above way and so it is part of the family of exponential distributions. 
+\end{example}
+\begin{example}
+Taking $n\in\mathbb{N}$ constant we can consider the distribution $\text{Bin}?(n,p)$. Its support is $\{0,1,\dots, n\}$ which is independent of p. What we need to verify is that it can be written in the fashion that is described in the definition
+\[P(k)=\binom{n}{k} p^k\left(1-p\right)^{n-k} = \left(1-p\right)^n\binom{n}{k} \left(\frac{p}{1-p}\right)^k = \]\[ = \exp\left(k\log\left(\frac{p}{1-p}\right)+\log\left(\binom{n}{k}\right)+n\log(1-p)\right)\]
+Therefore this is in the exponential distribution. Notice that this is only when n is constant, if we allow n to not be constant the problem we get is that the support is not independent of the parameters and so it doesn't fall into this exponential family distribution. 
+\end{example}
+\begin{example}
+Taking a distribution that follows a power law - 
+\[\mathbb{P}(X=k) =\frac{1}{\zeta(\gamma)} k^{-\gamma}, \text{ for } k\in\mathbb{N}\]
+\end{example}
+This is defined over the coefficient space $\Gamma = (1,\infty)$ (otherwise the distribution itself isn't well-defined). And it's support is $\mathbb{N}$ which is of course is independent of $\gamma$. Now notice that
+\[\mathbb{P}(X=k)=\exp\left(-\gamma\log k + \log\zeta(\gamma)\right)\]
+Most of the regular discrete distributions are also in this family. For example - bernoulli, binomial (with n being constant), poisson, geometric and so on\\\\
+Additionally most of the regular continuous distributions belong to this family - normal (where at least one of the parameters are known), exponential and so on. \\\\
+We can now consider a case where the space of coefficients are multi-dimensional.
+\newpage
+\begin{definition}
+Assume that $\Theta$ is an open subset of $\mathbb{R}^p$. We will say that a distribution $f_{\overrightarrow{\theta}}(\overrightarrow{y})$ is in the family of exponential distributions if all of the following occur \\\\
+(1). The support is independent of $\overrightarrow{\theta}$. \\\\
+(2). The distribution can be written in the following way
+\[f_{\overrightarrow{\theta}}(\overrightarrow{y}) = \exp\left(\sum_{j=1}^k c_j(\overrightarrow{\theta})T_j(\overrightarrow{y}) + d(\overrightarrow{\theta}) + S(\overrightarrow{y})\right)\]
+Here too we call $c_1(\overrightarrow{\theta}),\dots,c_k(\overrightarrow{y})$ the natural parameter of the distribution.
+\end{definition}
+\begin{example}
+We can now take $\mathcal{N}(\mu,\sigma^2)$ the normal distribution. The parameter space is $\Theta = \mathbb{R}\times (0,\infty)$. The support is all $\mathbb{R}$, which is independent of the coefficients. Now we want to check if we can express the density function in the way the definition needs 
+\[f(y) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{(y-\mu)^2}{2\sigma^2}\right)=\exp\left(-\frac{y^2-2y\mu+\mu^2}{2\sigma^2} -\log\sigma-\frac{1}{2} \log(2\pi)\right)\]
+This can be decomposed pretty easily to get what we want and so this is in the family of exponential distributions. 
+\end{example}
+\begin{exercise}
+Show that a multi-variate normal distribution with $(\overrightarrow{\mu},\Sigma)$ is also in the family of exponential distributions. What is k?
+\end{exercise}
+\begin{exercise}
+Given $Y\sim\mathcal{N}(\mu, (a\mu)^2)$ for some constant $\alpha>0$, In what type of family of exponential distributions is this distribution? If in the multi-dimensional case what is k? 
+\end{exercise}
+GMM, gaussian mixture model which is a widely-used distribution in many areas, is not in the family of exponential distributions. 
+\begin{theorem}
+Assume that we know that $f_{\theta}(\overrightarrow{y})$ is in the one-dimensional family of exponential distributions, and that the natural parameter $c(\theta)$ is continuously differentiable and the derivative doesn't hit zero. Taking the representation from the original definition we have that $T(\overrightarrow{y})$ is a UMVUE for $\mathbb{E}_\theta[T(\overrightarrow{y})]$  that attains the Cramer-Rao bound. \\\\
+On the other hand if $f_\theta(\overrightarrow{y})$ is a distribution dependent on $\theta$ whose support is independent of $\theta$. Assume there is an unbiased estimator $T(\overrightarrow{Y})$ for $g(\theta)$. If $T(\overrightarrow{Y})$ attains the Cramer-Rao bound for all $\theta$ then $f_\theta(\overrightarrow{y})$ is in the one dimensional family of exponential distributions. 
+\end{theorem}
+We will continue this in the next lecture
+\end{document}

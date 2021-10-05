@@ -1,0 +1,80 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+\subsection{Sufficient Statistic}
+\begin{definition} A statistic is a measurable function on the sampling and it is denoted by $T(Y)$. \end{definition}
+\begin{example} Given a sampling $(y_1,\dots,y_n)$, the following are statistics -
+\[1. \text{    }\sum_{i=1}^n y_i\]
+\[2. \text{    }\max\{y_i\}\]
+\[3. \text{    }Y_1-Y_2^{Y_3}\]
+This of course precludes using functions with information that the sampling doesn't reveal to us - for example a function that already contains our constants $\theta$. \end{example}
+\begin{example} A statistic $T(Y)$ is sufficient for an unknown parameter $\theta$ if the conditional distribution of the sampling given the statistic is independent of $\theta$. \end{example}
+\begin{example} We will return to example 2.5. We will show that $\sum_{i=1}^n Y_i$ is a sufficient statistic for parameter p (assuming every birth is bernoulli with parameter p). We want to check the following value - \[\mathbb{P}\left(Y\mid \sum_{i=1}^{20} \overrightarrow{y_i} = t\right) = \frac{\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y}, \text{ }\sum_{i=1}^{20} \overrightarrow{y_i} =t)}{\mathbb{P}(\sum_{i=1}^{20} \overrightarrow{y_i} = t)}=\]
+\[\begin{cases} \frac{1}{\binom{20}{t}}, & \text{if } \sum y_i =t \\ 0, & \text{ Otherwise}
+\end{cases}\]
+And this is independent of p and therefore this is a sufficient statistic by the previous definition. \end{example}
+Given a statistic it is now known how to check whether it is sufficient or not, but how can you generate a sufficient statistic? \\\\ 
+\begin{theorem}[Fisher-Neyman Factorization Theorem] 
+A statistic $T(\overrightarrow{Y})$ is sufficient for a parameter $\theta$ if and only if for all $\theta\in\Theta$ we have - 
+\[L(\theta;\overrightarrow{y}) = g(T(\overrightarrow{y}),\theta)\cdot h(\overrightarrow{y})\]
+Where the first part isn't directly dependent on $\overrightarrow{y}$ and the second part is independent of $\theta$. \end{theorem}
+\begin{proof}
+We will show for discrete random variables, but this can be easily be extended to continuous random variables. \\\\
+$\overrightarrow{y}$ is a realization of $\overrightarrow{Y}$, $T(\overrightarrow{y})=t$. 
+\\\\
+\underline{\textbf{($\Longrightarrow$):}}
+Now assume that $T(\overrightarrow{Y})$ is sufficient. Notice that \[L(\theta;\overrightarrow{y}) = \mathbb{P}(\overrightarrow{Y}=\overrightarrow{y}) = \mathbb{P}(\overrightarrow{Y}=\overrightarrow{y}, \text{ } T(\overrightarrow{y}) =t) = \mathbb{P}(\overrightarrow{Y}=\overrightarrow{y}\mid T(\overrightarrow{y}) =t)\cdot\mathbb{P}(T(\overrightarrow{y}) =t)\]
+Now take $\textbf{h}(\overrightarrow{y}):=\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y}\mid T(\overrightarrow{y}) =t)$. From sufficiency h is independent of $\theta$. \\\\
+Now define $\textbf{g}(T(\overrightarrow{y}), \theta):=\mathbb{P}(T(\overrightarrow{y}) =t)$
+And we have showed what we wanted. \\\\
+\underline{\textbf{($\Longleftarrow$):}}
+Now assume that the factorization exists, we now need to show that the statistic is sufficient meaning it is independent of $\theta$.
+Now assume \[L(\theta;\overrightarrow{y}) = g(T(\overrightarrow{y}),\theta)\cdot h(\overrightarrow{y})\]
+Notice that \[\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y}\mid T(\overrightarrow{y})= t)  =\begin{cases}
+\frac{\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y})}{\sum_{\overrightarrow{y}\mid T(\overrightarrow{y}=t)}\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y})}, & T(\overrightarrow{y}=t) \\ 0, & \text{ Otherwise}\end{cases} =\]
+\[ =\begin{cases}\frac{h(\overrightarrow{y})}{\sum_{\overrightarrow{y}\mid T(\overrightarrow{y}=t) h(\overrightarrow{y})}\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y})} , & T(\overrightarrow{y}=t) \\ 0, & \text{ Otherwise}\end{cases}\]
+This is independent of $\theta$ and therefore we are done. \end{proof}
+\begin{claim} Every one-to-one measurable function on a sufficient statistic is also a sufficient statistic for the same parameter. \end{claim}
+\begin{proof}
+Assume g is a one-to-one measurable function, and $T(\overrightarrow{y})$ is a sufficient statistic for $\theta$. Now we want to show that \[\mathbb{P}(\overrightarrow{Y}=y\mid f(T(\overrightarrow{y}))=t)\] is independent of $\theta$. g is one-to-one and therefore there is a unique s such that $g(s)=t$ which tells us that 
+\[\mathbb{P}(\overrightarrow{Y}=y\mid f(T(\overrightarrow{y}))=t) = \mathbb{P}(\overrightarrow{Y}=y\mid T(\overrightarrow{y})=s)\]
+Now T is a sufficient statistic and therefore it is independent of $\theta$. \\\\ Alternatively this can also be shown using the factorization theorem.\end{proof} 
+\newpage 
+\begin{example} Take a poisson distribution with constant $\lambda$, where $Y_i\sim\text{Poi}(\lambda)$ i.i.d. now we can see that the sum is also a sufficient statistic in this case to - \[L(\lambda;\overrightarrow{y}) = \prod_{i=1}^n e^{-\lambda}\frac{\lambda^{y_i}}{y_i!} = e^{-n\lambda}\lambda^{\sum y_i} \prod_{i=1}^n \cdot\frac{1}{y_i!}\]
+And form the factorization theorem we have that it is a sufficient statistic. \end{example}
+\begin{example} Going back to example 2.6 we can see \[L(\mu,\sigma;\overrightarrow{y}) = \prod_{i=1}^n \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2} \]
+And similarly we will get that this is a sufficient statistic. \\\\
+Now we can consider the following statistic - \[T(\overrightarrow{y})=\left(\bar{y}=\frac{1}{n}\sum_{i=1}^n y_i, \frac{1}{n}\sum_{i=1}^n (\bar{y}-y_i)^2\right)\]
+Rewrite this to get \[\sum_{i=1}^n (y_i-\mu)^2  = \sum_{i=1}^n (y_i-\bar{y}+\bar{y}-\mu)^2 = \sum_{i=1}^n \left[(y_i-\bar{y})^2+2(y_i-\bar{y})(\bar{y}-\mu)+(\bar{y}-\mu)^2\right] = \]\[\dots= \sum_{i=1}^n (y_i-\bar{y})^2 + n(\bar{y}-\mu)^2 \]
+Now it can be seen that \[L(\mu,\sigma;\overrightarrow{y}) = \left(\frac{1}{\sigma\sqrt{2\pi}}\right)^n e^{-\frac{\sum_{i=1}^n (y_i-\bar{y})^2}{2\sigma^2}}\cdot e^{-\frac{n(\bar{y}-\mu)^2}{2\sigma^2}}\]
+And from the factorization theorem this is a sufficient statistic. \end{example}
+\newpage
+\subsection{Minimal Sufficient Statistic}
+We have seen that \\\\
+- T is a sufficient statistic if and only if for every one-to-one function f, $f\circ T$ is a statistic.  \\\\
+- If T is a sufficient statistic then for some other function S we have that $(T,S)$ is a sufficient statistic. \\\\
+We are looking for a minimalist representation of the sufficient statistic. \\\\
+\begin{definition} A sufficient statistic $S(\overrightarrow{y})$ is called minimal if for any other sufficient statistic $T(\overrightarrow{y})$ there is a function f such that $S(\overrightarrow{y}) = f(T(\overrightarrow{y}))$\end{definition}
+\begin{theorem} There exists a minimal sufficient statistic. (Uniqueness is not necessarily trivial)\end{theorem}
+\begin{proof}
+First define an equivalence relation. For $\overrightarrow{y_1},\overrightarrow{y_2}\in\Omega$. Then \[\overrightarrow{y_1}\sim\overrightarrow{y_2}\Longleftrightarrow \frac{L(\theta;\overrightarrow{y_1})}{L(\theta;\overrightarrow{y_2})} \text{ is independent of }\theta\]
+Define a statistic $T(\overrightarrow{y})$ as a one-to-one function from the set of equivalence classes. Now we will show that T is a minimal sufficient statistic. \[\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y}\mid T(\overrightarrow{y})=t) = \begin{cases}
+\frac{\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y})}{\sum_{\overrightarrow{y_2}\mid T(\overrightarrow{y_2})=t}\mathbb{P}(\overrightarrow{Y}=\overrightarrow{y_2})} , & T(\overrightarrow{y})=t \\ 0 , & \text{ Otherwise}
+\end{cases} = \]\[=\begin{cases}
+\frac{L(\theta;\overrightarrow{y_1})}{\sum_{\overrightarrow{y_2}\mid T(\overrightarrow{y_2})=t}L(\theta;\overrightarrow{y_2})} , & T(\overrightarrow{y})=t \\ 0 , & \text{ Otherwise}
+\end{cases}=\]
+\[=\begin{cases}
+\frac{1}{\sum_{\overrightarrow{y_2}\mid T(\overrightarrow{y_2})=t}\frac{L(\theta;\overrightarrow{y_1})}{L(\theta;\overrightarrow{y_2})}} , & T(\overrightarrow{y})=t \\ 0 , & \text{ Otherwise}
+\end{cases}\]
+And this is independent of $\theta$ which tells us that T is a sufficient statistic, and what we have left is to prove is that it is minimal. \\\\
+Assume that S is a different sufficient statistic, and define an equivalence relation - 
+\[\overrightarrow{y_1}\sim_s\overrightarrow{y_2}\Longleftrightarrow S(\overrightarrow{y_1})=S(\overrightarrow{y_2})\]
+What we want to prove is that this equivalence relation has the following characteristic \[\overrightarrow{y_1}\sim_s\overrightarrow{y_2}\Longrightarrow \overrightarrow{y_1}\sim\overrightarrow{y_2}\]
+and we will be done.
+\newpage 
+So assume $\overrightarrow{y_1}\sim_s\overrightarrow{y_2}$. We want to show now that 
+\[ \frac{L(\theta;\overrightarrow{y_1})}{L(\theta;\overrightarrow{y_2})} \text{ is independent of }\theta\]
+And so
+\[ \frac{L(\theta;\overrightarrow{y_1})}{L(\theta;\overrightarrow{y_2})} = \frac{g(S(\overrightarrow{y_1},\theta))\cdot h(\overrightarrow{y_1})}{g(S(\overrightarrow{y_2},\theta))\cdot h(\overrightarrow{y_2})} = \frac{h(\overrightarrow{y_1})}{h(\overrightarrow{y_2})}\]
+Which is independent of $\theta$ and therefore we are done.\end{proof}
+\end{document}

@@ -1,0 +1,101 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+\subsection{Interval Estimation}
+\begin{definition}
+Given n samples $\overrightarrow{Y}_1,\dots,  \overrightarrow{Y}_n\sim f_{\theta}(\overrightarrow{Y})$ and $\alpha>0$ and 2 statistics L, U such that
+\[\mathbb{P}(L\leq \theta\leq U) = 1-\alpha\]
+We then say that $[L,U]$ is a confidence interval with significance $\alpha$ for $\theta$.\\\\
+Hisotrically The values for $\alpha$ that are usually chosen from $\{0.05, 0.01, 0.001\}$, even though theoretically it can be any value in $(0,1)$. 
+\end{definition}
+\begin{example}
+Given $Y\sim [0,\theta]$, for all $t\leq\alpha$ the interval -
+\[\left[\frac{Y}{1-\alpha +t}, \frac{Y}{t}\right]\]
+is a confidence interval with significance $\alpha$ for $\theta$. This can be seen by the fact that 
+\[\mathbb{P}\left(\theta\geq \frac{Y}{1-\alpha +t} \land \theta\leq\frac{Y}{t} \right) = \mathbb{P}\left( t\theta\leq Y\leq \theta- \alpha\theta+t\theta\right)=\dots=1-\alpha\]
+\end{example}
+\begin{definition}
+Often it is demanded that we have symmetry in the following sense - 
+\[\mathbb{P}(\theta<L) = \mathbb{P}(\theta>U)\]
+\end{definition}
+And so returning to this previous example we have that - 
+\[\mathbb{P}(Y<t\theta) = \mathbb{P}(Y>\theta-\alpha\theta+t\theta)\]
+Meaning
+\[t = \alpha - t\]
+Alltogether
+\[t=\frac{1}{2}\alpha\]
+This means we want to take the confidence interval to be 
+\[\left[\frac{2Y}{2-\alpha}, \frac{2Y}{\alpha}\right]\]
+\newpage
+\begin{definition}
+Under a Baysien world view we assume that there is a probability space on the constant space. And so given $\alpha>0$ we look for $L,U$ statistics such that
+\[\mathbb{P}(L\leq\theta \leq U) = 1-\alpha\]
+And then we say that $[L,U]$ is a credible interval with confidence $\alpha$ for $\theta$. 
+\end{definition}
+\begin{definition}
+Given samples $Y_1,\dots, Y_n$ samples we look for $L,U$ such that
+\[\mathbb{P}(L\leq Y_{n+1}\leq U) = 1-\alpha\]
+This is called a prediction interval
+\end{definition}
+\subsection{Finding a confidence interval}
+\begin{definition}
+A function of the samples and the parameter
+\[\psi\left(\overrightarrow{Y}, \theta\right)\]
+such that it's distribution is independent of the parameter is called a pivot.\\\\
+Given a pivot we look for an interval $A_{\alpha}$ such that
+\[\mathbb{P}\left(\psi\left(\overrightarrow{Y},\theta\right)\in A_{\alpha}\right) = 1-\alpha\]
+Given a sampling then $\overrightarrow{y}$ we will invert (not trivial) the pivot and rescue $\theta$ to get an interval
+\[C_{\alpha}:=\{\theta\mid \psi(\overrightarrow{y}, \theta)\in A_{\alpha}\}\]
+\end{definition}
+\begin{example}
+Given a sampling $Y_1,\dots,Y_n\sim\mathcal{N}(\mu, \sigma^2)$ i.i.d. with known $\sigma^2$. And so we know that
+\[\bar{Y}\sim\mathcal{N}\left(\mu,\frac{\sigma^2}{n}\right)\] And so we can define a pivot
+\[\psi\left(\overrightarrow{Y},\mu\right) = \bar{Y}-\mu\]
+Now choose the intervals in the following way (using symmetry of normal distributions)
+\[\mathbb{P}\left(|\bar{Y}-\mu|\leq z_{\frac{1}{2}\alpha} \cdot\frac{\sigma}{\sqrt{n}}\right) = 1-\alpha\]
+Where \[z_{\alpha}\] is the inversion of the CDF of the normal distribution. 
+Then we get that the confidence interval is 
+\[C_{\alpha} = \left[\bar{y}-z_{\frac{1}{2}\alpha}\cdot\frac{\sigma}{\sqrt{n}}, \bar{y}+z_{\frac{1}{2}\alpha}\cdot\frac{\sigma}{\sqrt{n}}\right]\]
+\end{example}
+\begin{claim}
+Given $X\sim F_X(x)$, where F is the CDF. We have that
+\[\mathbb{P}(F_X(X)\leq\alpha)=\alpha\]
+\end{claim}
+\newpage
+For an i.i.d. sample $Y_1,\dots,Y_n$ the following is a pivot - 
+\[\prod_{i=1}^n F_{\theta}(y_i)\]
+It is custom to take the negative log of this as a pivot. Meaning
+\[-\sum \log F_{\theta}(y_i)\]
+This gives us 
+\[-\sum \log F_{\theta}(y_i)\sim\frac{1}{2}\chi^2_{2n}\]
+Notice that often it is very hard to rescue $\theta$ from the construction we have.
+\begin{definition}
+We say that $f_X$ belongs to the scale-location family of distributions if f is controlled by 2 parameters $\mu$ and $\sigma>0$ such that 
+\[f_{\mu,\sigma}(x) = \frac{1}{\sigma} f_{0,1}\left(\frac{X-\mu}{\sigma}\right)\]
+Where $f_{0,1}$ is called the standard distribution of the family. 
+\end{definition}
+\begin{example}
+Normal distribution, the "standardization" can be seen to be a pivot. 
+\end{example}
+\begin{claim}
+Let $T(\overrightarrow{Y})$ be a sufficient statistic for $\theta$ whose distribution is $f_{T}$ which is uni-modal, then there exists a confidence interval with significance $\alpha$ for $\theta$ with minimal expected length of interval based on the information from $T(\overrightarrow{y})$. This is 
+\[\{x\mid f_T(x)>c_{\alpha}\}\]
+Where $c_{\alpha}$ is determined in the natural way
+\end{claim}
+\begin{proof}
+We will show that this is minimal. Denote $(a_1,b_1)$ to be the confidence interval from the claim, and assume $(a_2,b_2)$ is a different confidence interval with the same significance. 
+We will consider the following intervals -\\\\ 
+(1). $(a_1,b_1)\cap(a_2,b_2)$. \\\\
+(2). $(a_1', b_1') = (a_1,b_1)\setminus(a_2,b_2)$. \\\\
+(3). $(a_2', b_2') = (a_2,b_2)\setminus(a_1,b_1)$. \\\\
+Notice that (we can also do this with $(a_2', b_2')$)
+\[\int_{[a_1', b_1']} f_{T}(x) dx = 1-\alpha -\int_{(a_1,b_1)\cap(a_2,b_2)} f_T(x)dx\]
+Notice that
+\[\int_{(a_1', b_1')} f_T(x) dx >\int_{(a_1', b_1')} c_{\alpha} dx = c_{\alpha}(b_1' - a_1')\]
+Similarly
+\[\int_{(a_2', b_2')} f_T(x) dx \leq \int_{(a_2', b_2')} c_{\alpha} dx = c_{\alpha}(b_2' - a_2')\]
+Using this we can interpolate
+\[b_1'-a_1'< \frac{1}{C_{\alpha}} \int_{(a_1', b_1')} f_T(x) dx = \frac{1}{c_{\alpha}} \int_{(a_2', b_2')} f_T(x) dx\leq \frac{1}{c_{\alpha}}\cdot c_{\alpha} (b_2' - a_2') = b_2' - a_2'\]
+And so we have shown minimality. 
+\end{proof}
+\end{document}

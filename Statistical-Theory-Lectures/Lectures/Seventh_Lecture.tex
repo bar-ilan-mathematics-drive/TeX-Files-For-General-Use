@@ -1,0 +1,92 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+\begin{theorem}[Cramer-Rao Bound]
+Let there be $Y_1,\dots,Y_n\sim f_{\theta}(\overrightarrow{y})$ where $\Theta$ is one-dimensional. Assume also \\\\
+(1). The support of the distribution is independent of $\theta$ (meaning where the density or PDF is non-zero is independent of $\theta$). \\\\
+(2). For every statistic $T=T(\overrightarrow{Y})$ with finite expected value we have the following equalities
+\[\frac{d}{d\theta}\mathbb{E}[T] = \frac{d}{d\theta} \int_\Omega T(\overrightarrow{y})f_{\theta}(\overrightarrow{y}) d\overrightarrow{y} = \int_{\Omega} T(\overrightarrow{y}) \frac{d}{d\theta} f_{\theta}(\overrightarrow{y})d\overrightarrow{y}\]
+(The interesting equality is the 2nd since it is the one that provides new information, where you can change the order between integration and derivation). \\\\
+Under these assumptions we have that for any unbiased estimator with finite variance $\hat{\theta}$ for $\theta$ we have that
+\[\text{Var}(\hat{\theta})\geq\frac{1}{I(\theta)}\]
+Where \[I(\theta):= \mathbb{E}\left[\left(\frac{d}{d\theta}\log f_{\theta}(\overrightarrow{y})\right)^2\right]\]
+More generally we have that if T is an unbiased estimator for $g(\theta)$ then we have 
+\[\text{Var}(T)\geq \frac{g'(\theta)^2}{I(\theta)}\]
+($I(\theta)$ is called Fischer information) \\\\
+\end{theorem}
+\begin{claim}
+Under these assumptions we have \[\mathbb{E}\left[\frac{d}{d\theta}\log(f_{\theta}(\overrightarrow{y}))\right] = 0\]
+\end{claim}
+\begin{proof}
+\[\mathbb{E}\left[\frac{d}{d\theta}\log(f_{\theta}(\overrightarrow{y}))\right] = \int \frac{d}{d\theta}\log(f_{\theta}(\overrightarrow{y})) f_{\theta}(\overrightarrow{y}) d\overrightarrow{y} = \int\frac{\frac{d}{d\theta}
+f_{\theta}(\overrightarrow{y})}{f_{\theta}(\overrightarrow{y})} f_{\theta}(\overrightarrow{y}) d\overrightarrow{y} = \]\[=\int\frac{d}{d\theta}f_{\theta}(\overrightarrow{y})d\overrightarrow{y } = \frac{d}{d\theta} \int f_{\theta}(\overrightarrow{y})d\overrightarrow{y} = \frac{d}{d\theta} 1 =0\]
+This means that the Fischer information is just the variance of the derivative log-likelihood function
+\end{proof}
+\begin{proof}[Proof Of Cramer-Rao Bound]
+Let there be an unbiased estimator T for $g(\theta)$. We know that
+\[g(\theta) = \mathbb{E}[T] = \int T(\overrightarrow{y})f_{\theta}(\overrightarrow{y}) d\overrightarrow{y}\]
+Meaning 
+\[g'(\theta) = \frac{d}{d\theta}\int T(\overrightarrow{y})f_{\theta}(\overrightarrow{y}) d\overrightarrow{y} = \int T(\overrightarrow{y}) \frac{d}{d\theta} f_{\theta}(\overrightarrow{y}) d\overrightarrow{y} = \mathbb{E}\left[T\cdot \frac{d}{d\theta} \log(f_{\theta}(\overrightarrow{y})\right]=\]
+\[=\text{Cov}(T(\overrightarrow{y}), \frac{d}{d\theta}\log f_{\theta}(\overrightarrow{y})) + \mathbb{E}[T]\cdot\mathbb{E}[\frac{D}{d\theta} \log f_\theta(\overrightarrow{y})] = \text{Cov}(T(\overrightarrow{y}), \frac{d}{d\theta}\log f_{\theta}(\overrightarrow{y}))\]
+We know that for general random variables X,Y that
+\[\text{Cov}(X,Y)\leq \sqrt{\text{Var}(X)\cdot\text{Var}(Y)}\]
+Meaning
+\[g'(\theta)\leq \sqrt{\text{Var}(T(\overrightarrow{y}))\cdot\text{Var}(\log f_{\theta}(\overrightarrow{y}))} = \sqrt{\text{Var}(T(\overrightarrow{y}))\cdot I(\theta)}\]
+And so we can see that 
+\[\text{Var}(T)\geq \frac{g'(\theta)^2}{I(\theta)}\]
+\end{proof}
+\begin{claim}
+If $Y_1,\dots,Y_n\sim f_{\theta}(\overrightarrow{y})$ are a series of i.i.d. random variables with the assumptions above. Define
+\[I^{*}:=\mathbb{E}\left[\left(\frac{d}{d\theta} \log f_{\theta}(\overrightarrow{y})\right)^2\right]\]
+We have that \[I(\theta) = nI^*(\theta)\]
+\end{claim}
+\begin{example}
+Assume $Y_1,\dots,Y_n\sim\mathcal{N}(\mu,\sigma^2)$ where we know $\sigma^2$ (meaning the parameter space is only for the mean). We are looking for an unbiased estimator for $\mu$. Let's check the regularity conditions that appear in the Cramer-Rao bound - \\\\
+(1). The support is $\mathbb{R}$ for all $\theta$, which implies independence. \\\\
+(2). We need to show that we can exchange derivation by $\mu$ and integration according to y. This is true since the dependence of $f_\mu(\theta)$ on y and $\mu$ is negative super-exponential and so it is a fact that we have all the related convergences which also covers this condition. \\\\
+Now we want to calculate the Cramer-Rao bound. The density is 
+\[f_\mu(y) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}(\frac{y-\mu}{\sigma})^2}\]
+\newpage
+And so
+\[\log(f_\mu(\theta)) = -\log(\sigma\sqrt{2\pi}) - \frac{1}{2} \left(\frac{y-\mu}{\sigma}\right)^2\]
+Meaning 
+\[\frac{d}{d\mu} \log(f_\mu(\theta))= \frac{y-\mu}{2\sigma^2} = \frac{y-\mu}{\sigma^2}\]
+And so 
+\[I^*(\mu) = \mathbb{E}\left[\frac{(y-\mu)^2}{\sigma^4}\right] = \frac{1}{\sigma^4} \mathbb{E}[(y-\mu)^2] = \frac{1}{\sigma^2}\]
+And so alltogether
+\[I(\mu) = \frac{n}{\sigma^2}\]
+This tells us that for every unbiased estimator T for $\mu$ we have
+\[MSE(T)\geq\frac{\sigma^2}{n}\]
+We saw that the sample average is an unbiased estimator with this above MSE and so it is a UMVUE. 
+\end{example}
+\textbf{claim}
+If in addition to the regularity assumptions from the bound we also assume that $\log f_\theta(\overrightarrow{y})$ is twice-differentiable then
+\[I(\theta) = -\mathbb{E}\left[\frac{d^2}{d\theta^2}(\log f_\theta(\overrightarrow{y}))\right]\]
+\begin{proof}
+\[\frac{d^2}{d\theta^2}\left(\log f_\theta(\overrightarrow{y})\right) = \frac{d}{d\theta} \left[\frac{\frac{d}{d\theta} f_\theta(\overrightarrow{y})}{f_\theta(\overrightarrow{y})}\right] = \frac{(\frac{d^2}{d\theta^2} f_\theta(\overrightarrow{y}))\cdot f_\theta(\overrightarrow{y}) - (\frac{d}{d\theta} f_\theta(\overrightarrow{y})^2 }{f_\theta^2(\overrightarrow{y})}\]
+We now want to calculate the expected value of all of this. If we calculate the first part we have
+\[\mathbb{E}\left[\frac{\frac{d^2}{d\theta^2} f_\theta(y)}{f_\theta(\overrightarrow{y})}\right] = \int \frac{\frac{d^2}{d\theta^2} f_\theta(y)}{f_\theta(\overrightarrow{y})} f_\theta(\overrightarrow{y}) d\overrightarrow{y} = \int \frac{d^2}{d\theta^2} f_\theta(\overrightarrow{y}) d\overrightarrow{y} = \frac{d^2}{d\theta^2} 1 = 0\]
+Meaning that all we are left with is
+\[\mathbb{E}\left[-\frac{(\frac{d^2}{d\theta^2} f_\theta(\overrightarrow{y}) )^2}{f_\theta^2(\overrightarrow{y})}\right] = I(\theta)\]
+And this ends the proof.
+\end{proof}
+\newpage
+\begin{example}
+We can now look for an unbiased estimator for the variance of a normal distribution. Meaning we now consider the parameter space to be the variance while the mean is a constant. 
+\end{example}
+Remember 
+\[\log(f_\sigma(y)) = -\log(\sigma\sqrt{2\pi}) - \frac{1}{2} \left(\frac{y-\mu}{\sigma}\right)^2\]
+And so 
+\[\frac{d}{d\sigma} \log f_\sigma(y) = -\frac{1}{\sigma} + \frac{(y-\mu)^2}{\sigma^3}\]
+Differentiating again gives us 
+\[\frac{d^2}{d\sigma^2} \log f_\sigma(y) = \frac{1}{\sigma^2} -3\frac{(y-\mu)^2}{\sigma^4}\]
+Meaning 
+\[\mathbb{E}\left[\frac{d^2}{d\sigma^2} \log f_\sigma(y)\right] = \frac{1}{\sigma^2} - 3\frac{1}{\sigma^2} = \frac{-2}{\sigma^2}\]
+And so 
+\[I(\theta) = n\cdot-\frac{-2}{\sigma^2} = \frac{2n}{\sigma^2}\]
+We want to estimate $\sigma^2$ and so define $g(\sigma) = \sigma^2$ and see that for every unbiased estimator (using the bound from the beginning of the lecture) we have that
+\[MSE(T)\geq \frac{(2\sigma)^2}{\frac{2n}{\sigma^2}} = \frac{2\sigma^4}{n}\]
+Remember that the unbiased estimator we have found for the variance is
+\[\hat{s^2} = \frac{1}{n-1}\sum (Y_i-\bar{Y})^2\]
+We will want to compare $MSE(\hat{s^2})$ to the bound we have found in the next lecture. 
+\end{document}

@@ -1,0 +1,44 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+\begin{example} Take a Bernoulli distribution $\text{Be}(p)$, and 2 sampling series - $\overrightarrow{y_1},\overrightarrow{y_2}$. We want to see when they are equivalent (under the equivalency that appears in the previous proof). This means we want to know when the following value is independent of p - \[\frac{L(\theta,\overrightarrow{y_1})}{L(\theta,\overrightarrow{y_1})} = \frac{p^{(\sum_{i=1}^n y_{1,i})}(1-p)^{(n - \sum_{i=1}^n y_{1,i})}}{p^{(\sum_{i=1}^n y_{2,i})}(1-p)^{(n - \sum_{i=1}^n y_{2,i})}}\]
+This is independent of p if and only if \[\sum_{i=1}^n y_{1,i} = \sum_{i=1}^n y_{2,i}\]
+Which means that the sum \[T(\overrightarrow{y}):=\sum_{i=1}^n y_i\]
+should be a minimal sufficient statistic in this case. \end{example}
+\begin{example}
+Consider a normal distribution, and look at the same fraction - \[\frac{L(\theta,\overrightarrow{y_1})}{L(\theta,\overrightarrow{y_1})} = \frac{\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\sum_{i=1}^n (y_{1,i}-\mu)^2}{\sigma^2}}}{\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\sum_{i=1}^n (y_{2,i}-\mu)^2}{\sigma^2}}} = \exp\left(-\frac{\sum_{i=1}^n(y_{1,i}-\mu)^2 - \sum_{i=1}^n(y_{2,i}-\mu)^2}{2\sigma^2}\right)=\]\[=\exp\left(-\frac{\sum_{i=1}^n(y_{1,i}-\bar{y_1})^2 - \sum_{i=1}^n(y_{2,i}-\bar{y_2})^2 + n(\bar{y_1}-\mu)^2 - n(\bar{y_2}-\mu)^2} {2\sigma^2}\right)\]
+And this happens when the exponent is 0 and this happens when
+\[\sum_{i=1}^n(y_{1,i}-\bar{y_1})^2 = \sum_{i=1}^n(y_{1,i}-\bar{y_2})^2 \]
+And 
+\[\bar{y_1} = \bar{y_2}\]
+Which means we can define \[T(\overrightarrow{y}) = \left(\bar{y}, \sum_{i=1}^n (y_i-\bar{y})^2\right)\]
+to be a minimal sufficient statistic. \end{example}
+\newpage
+\subsection{Complete statistic:}
+\begin{definition}
+A statistic T is said to be complete if and only if for all measurable functions g:
+\[\forall\theta:\text{ } \mathbb{E}\left[g(T(\overrightarrow{Y}))\right]=0\Longrightarrow\forall\theta: \text{ }\mathbb{P}_\theta\left(g(T(\overrightarrow{Y}))=0\right)=1\] \end{definition}
+\begin{example} $Y_1,\dots,Y_n\sim\text{Be}(p)$, and take the known minimal statistic \[T(\overrightarrow{y}) = \sum_{i=1}^n y_i\]
+Take a measurable function g and assume that for all $p\in(0,1)$
+\[\mathbb{E}\left[g(T(\overrightarrow{Y}))\right] = 0\]
+Since T distributes binomially we have that - 
+\[\mathbb{E}\left[g(T(\overrightarrow{Y}))\right] = \sum_{k=0}^n g(k) \mathbb{P}\left(T(\overrightarrow{Y})=k\right) = \sum_{k=0} g(k)\binom{n}{k} p^k (1-p)^{n-k} =\]\[= (1-p)^n\sum_{i=1}^n g(k)\binom{n}{k} \left(\frac{p}{1-p}\right)^k\]
+Assume that for all p this is 0, we can now ignore what come before the sum and notice that this is a polynomial in $\frac{p}{1-p}$ that has infinite amount of zeros. This is only possible if the polynomial itself has coefficients that are only zeros, $\binom{n}{k}$ is always non-negative values and so the function g has to be the zero function. \end{example}
+\begin{example} Assume $Y_1, Y_2\sim\mathcal{N}(\mu, 1)$ i.i.d., and define $T = Y_1 + Y_2$. Notice that $T\sim\mathcal{N}(2\mu, 2)$. Given a measurable function g \[\mathbb{E}\left[g(T(\overrightarrow{Y}))\right] = \int_{\mathbb{R}} g(t) \frac{1}{2\sqrt{2\pi}} e^{-\frac{1}{2}(\frac{t-2\mu}{2})^2}dt = \frac{1}{\sqrt{8\pi}} e^{-\frac{1}{2} \mu^2}\int_{\mathbb{R}} g(t) e^{-\frac{t^2}{8}} e^{\frac{1}{2}\mu t} dt\]
+If we now take \[h(t):=g(t) e^{-\frac{t^2}{8}}\]
+We can see that if the above integral is 0 always we also have that the MGF of h will be zero everywhere which means that $h=0$ a.s. meaning $g=0$ a.s. which gives us what we want - T is a complete statistic. \end{example}
+\newpage
+\begin{theorem} If T is a sufficient complete statistic, it is also a minimal statistic (up to probability 0 sets). \end{theorem}
+\begin{proof}Let S be a sufficient minimal statistic. (existence was proven last lecture). We know there is a function $g_1$ such that $S=g_1(T)$. \\\\
+Define \[g_2(s):=\mathbb{E}[T\mid S]\]
+$g_2$ is a statistic since S is a sufficient statistic. Now we know - \[\mathbb{E}[T]=\mathbb{E}[\mathbb{E}[T\mid S]] = \mathbb{E}[g_2]\]
+Now for all $\theta$ we have that 
+\[\mathbb{E}[T-g_2] = 0\]
+S is a function of T and therefore we have that 
+\[\forall\theta: \text{ } \mathbb{E}[T-g_2(g_1(T))] = 0\]
+From completeness of Twe have 
+\[\forall\theta: \text{ } \mathbb{P}[T=g_2(g_1(T))] = 0\]
+S therefore is also a sufficient minimal statistic (since T is a function of it and every other statistic can be derived from this). It is also equal to T almost everywhere.\end{proof}
+\subsection{Estimation}
+\begin{definition} An estimator is a statistic that is supposed to estimate $\theta$. The value $T(\overrightarrow{y})$ is called an estimate. \end{definition}
+\end{document}
