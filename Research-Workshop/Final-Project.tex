@@ -1,0 +1,146 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, bbm, amsthm}
+\title{Reserach Workshop Final Project}
+\author{Yisrael Haber}
+\begin{document}
+\maketitle
+\begin{abstract}
+This is an assignment given in the course "Research Workshop" given the winter semester of 2020. This isn't the original, this was rewritten to be used for an example for use of LaTeX files. This was my first ever written TeX file and so isn't an optimal showcase but it represents that LaTeX can be learnt pretty easily, and doesn't have to be all that complicated. 
+\end{abstract}
+\tableofcontents
+\newpage
+\section{The n-th Dimensional Cube}
+\textbf{Definiton:}
+Define $B_n$ to be Cayley graph of $A_n:=\mathbb{Z}_2^n$ over generators
+$e_1,e_2,\dots,e_n$  where $e_i$ denotes an n-tuple of only 0's except for a 1 in the i-th coordinate.
+\\\\
+\textbf{Definition:} $[n]:=\{1,2,\dots,n\}$
+\\\\
+According to our definition 2 points $a,b\in A_n$ are connected if and only if there is an $i\in[n]$ such that $a=b+e_i$
+\\
+\\
+\textbf{Definition:} Define the function that counts the distance of a vector in $X_n$ from the origin -  $zeroDist:A_n \rightarrow[n]$, 
+where \[zeroDist(a_1,\dots,a_n) = \sum_{i=1}^n a_i \text{ (not modulo 2).}\] Notice that this graph is symmetric in the sense that adding any vector from $A_n$ results in the exact same graph.
+\subsection{What Is The Diameter Of The Given Graph?}
+\textbf{Solution:}
+Notice that zeroDist exactly defines the amount of distinct generators $e_i$ we need to add to the 0-vector to get our given vector and therefore defines the distance between a vector in our set and 0. Now since $zeroDist(1,1,...1)=n$, and the maximal distance we can get is n (you are summing at maximum 1 for each value and there are n such values) that gives us a \textbf{diameter of n in our graph}.
+\subsection{Charecterize The Antipodal Points In Our Graph}
+\textbf{Definition:}
+Define Dist : $A_n\times A_n\rightarrow[n]$, by $Dist(a,b) = zeroDist(a+b)$. first notice the symmetry between a and b - $Dist(a,b)=Dist(b,a)$. Since zeroDist is well defined we get that Dist is well defined. Now since $Dist(a,b) = zeroDist(a+b)$, and $zeroDist(a+b)$ defines how many generators we need to add to 0 to get a+b, by adding a to both sides we get that $zeroDist(a+b)$ defines how many generators we need to add to a to get b which is exactly the distance between a and b in our graph
+\\
+\\
+\textbf{Solution:}
+Given a vector a in our graph notice that
+\[Dist(a,(1,1,...,1)-a)=\\zeroDist(a+(-a)+(1,1,...,1))=zeroDist(1,1,...,1)=n\] meaning a and $(1,1,...,1)-a$ are antipodal. Additionally if a and b are antipodal we get $n=Dist(a,b)=zeroDist(a+b)$ but as we have seen before only one vector has zeroDist value of n and therefore we get that $a+b=(1,1,...,1)$ which means $b=(1,1,...,1)-a$.Therefore we get that points a and b are antipodal if and only if $a+b=(1,1,...,1)$  
+\subsection{How Many Geodesics Are There Between 2 Antipodal Points?}
+\textbf{Solution}
+Given a and b in our set who are antipodal in our graph we now know that to get from a to b we need to add n generators. since we need excatly all of them we get that all geodesic paths are exactly determined by the order of generators we add. But the set of all possible orders on our generators is the set of permutations on [n] which has exactly n! members.
+\textbf{In conclusion we get that there are exactly n! geodesic paths between antipodal points}
+
+\section{Eigenvalues And Eigenvectors For $B_n$'s Adjacency Matrix}
+\textbf{Definition:}
+Define $X_n$ to be the adjacency matrix of $B_n$.
+\\
+\\
+We will find a recursive construction for $X_n$ using a recursive construction for $B_n$. Notice that we can construct $B_{n+1}$ by taking 2 distinct copies of $B_n$ - call them $U_1$ and $U_2$, now pick $a_1$ and $a_2$ from each copy of $B_n$. Connect $a_1$ and $a_2$ by an edge, now connect a pair of vertices that come from the different copies - $b_1$ and $b_2$ if and only if the path between $a_1$ and $b_1$ in $U_1$ is the same as the path between $a_2$ and $b_2$ in $U_2$. (We define the path between 2 vertices as the set of $e_i$ we need to add to each vertex to get to the other vertex). We will get $B_{n+1}$, and for simplicity we can take $U_1 = B_n \times \{0\}$ and $U_2 = B_n \times \{1\}$, and $a_1$ to be (0,0,..,0,0) and $a_2$ to be (0,0,...,0,1) vectors of length n+1.
+\\ \\ 
+Using this we will also construct $X_n$ (for $n>2$) recursively. $X_{n+1}$ is a $2^{n+1}$ by $2^{n+1}$ matrix. We will divide this matrix into 4 blocks which are $2^n$ by $2^n$ matrices. For n=2 we can order the vertices in this ascending series $(0,0),(1,0),(1,1),(0,1)$. Now for each following $n+1$ we can order our vertices such that we get the bibliographic order on $U_1\cup U_2$ where $U_1$ has the "smaller" vertices. This gives us a recursive ordering on all vertices of the cube. Now we will create our adjacency matrix for $X_{n+1}$. The way we order our vertices insures that the top left and bottom right blocks will just be the adjacency matrix of $U_1$ and $U_2$ respectively - both are $X_n$. Additionally the way we ordered the vertices and constructed the graph gives us that the bottom left and top right blocks have to be $I_{2^n}$ which means we get:
+\[X_{n+1} = \begin{bmatrix} X_n & I_{2^n} \\ I_{2^n} & X_n\end{bmatrix}\]
+\textbf{Finding the eigenvectors and eigenvalues}
+First we'll find for n=1,2. then we'll advance forward and get all eigenvectors and eigenvalues (by induction) for all n.\\
+\underline{\textbf{n=1:} }
+\begin{align*}det(\lambda I - X_1) &= 0 \\ det\left(\lambda I -\begin{bmatrix}
+0 & 1 \\ 1 & 0
+\end{bmatrix}\right) &= 0 \\ det\left(\begin{bmatrix}
+\lambda & -1 \\ -1 & \lambda
+\end{bmatrix}\right)&=0 \\ \lambda^2-1&=0 \Longrightarrow \underline{\lambda = -1,1}.\end{align*}
+after an easy guess we get that $(1,1)$ is an eigenvector for $\lambda=1$ and $(1,-1)$ is an eigenvector for $\lambda=-1$.
+\newline\newline
+\underline{\textbf{n=2:}}
+\begin{align*} 
+det(\lambda I -X_2)&=0 \\ det\left(\begin{bmatrix} \lambda & -1 & 0 & -1 \\ -1 & \lambda & -1 & 0 \\ 0 & -1 & \lambda & -1 \\ -1 & 0 & -1 & \lambda \end{bmatrix}\right)&=0 \\ \lambda^4-4\lambda^2&=0 \Longrightarrow \underline{\lambda=-2,0,2}.
+\end{align*}
+We get by guessing (guessing what the next part will suggest) that \[\begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}\] is an eigenvector for $\lambda = 2$, \[\begin{bmatrix} 1 \\ 1 \\ -1 \\ -1 \end{bmatrix} \land \begin{bmatrix} 1 \\ -1  \\ -1 \\ 1\end{bmatrix}\] are eigenvectors for $\lambda=0$ and \[\begin{bmatrix} 1 \\ -1 \\ 1 \\ -1 \end{bmatrix}\]  is an eigenvector for $\lambda=-2$. For both cases we get a basis of eigenvectors that are linearly independent that is the maximal possible set of linearly independent vectors (for each case individually).  
+Now we will, by induction, get all eigenvalues and eigenvectors. 
+\begin{align*}
+\begin{bmatrix} X_n & I_{2^n} \\ I_{2^n} & X_n \end{bmatrix}  \begin{bmatrix} v \\ v \end{bmatrix} &= \begin{bmatrix} X_nv + I_{2^n}v \\ X_nv + I_{2^n}v \end{bmatrix} = \begin{bmatrix} \lambda v + v \\ \lambda v + v \end{bmatrix} = (\lambda+1)\begin{bmatrix}
+v \\ v
+\end{bmatrix} \\
+\begin{bmatrix} X_n & I_{2^n} \\ I_{2^n} & X_n \end{bmatrix} \begin{bmatrix} v \\ -v \end{bmatrix} &= \begin{bmatrix} X_nv - I_{2^n}v \\ I_{2^n}v-X_nv \end{bmatrix} = \begin{bmatrix} \lambda v - v \\ v-\lambda v \end{bmatrix} = (\lambda-1)\begin{bmatrix}
+v \\ -v
+\end{bmatrix}
+\end{align*}
+The calculation above gives us that if we have a basis of eigenvectors that has $2^n$ vectors (using $X_n$) then we can get $2^{n+1}$ eigenvectors that are linearly independent for $X_{n+1}$. this will also gives all possible eigenvalues for $X_{n+1}$ - for any $\lambda$ eigenvector of $X_n$ we get that $\lambda-1,\lambda+1$ are eigenvalues of $X_{n+1}$. This exactly happens since we already calculated for the basic cases of $n=1,2$ and by induction we get all possible eigenvalues and eigenvectors. We will get the next table of eigenvalues:
+\\ \\
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c}
+n=1 & -1 & 1 \\
+n=2 & -2 & 0 & 2 \\
+n=3 & -3 & -1 & 1 & 3 \\
+n=4 & -4 & -2 & 0 & 2 & 4\\
+n=5 & -5 & -3 & -1 & 1 & 3 & 5\\
+n=6 & -6 & -4 & -2 & 0 & 2 & 4 & 6 \\
+n=7 & -7 & -5 & -3 & -1 & 1 & 3 & 5 & 7 \\
+n=8 & -8 & -6 & -4 & -2 & 0 & 2 & 4 & 6 & 8 \\
+n=9 & -9 & -7 & -5 & -3 & -1 & 1 & 3 & 5 & 7 & 9 \\
+n=10 & -10 & -8 & -6 & -4 & -2 & 0 & 2 & 4 & 6 & 8 & 10 \\
+\end{tabular}
+\\
+\\
+Notice we can find how many times any of these eigenvalues repeats - we can think of this tree as a binary tree, after adding a 0 at the top. Asking how many times an eigenvalue repeats is equivalent to asking how many ways we can get to lambda from the head of the tree, and that is ${n\choose i}$ where i is the index in which $\lambda$ appears in the nth line in the table. To find the above index you can add n to your eigenvalue and then divide by 2 to normalize the set of eigenvalues from $\{-n,-n+2,\dots,n-2,n\}$ to $\{0,1,\dots,n\}$
+\\
+\\
+In conclusion we get a recursive way to get all eigenvectors, and for $X_n$ we get that the eigenvalues are the set $\{-n,-n+2,...,n-2,n\}$ (including repetition).
+
+\section{Descents In Symmetric Group - $S_n$} 
+\textbf{Definition:}
+For $\pi\in S_n$ we define $i<n$ to be a descent if and only if $\pi(i)>\pi(i+1)$.\\
+\textbf{Definition:}
+We define $S^{k_1, k_2,  \dots, k_i}_n$ to be the subset of $S_n$ with all the permutations with a descent in indexes ${k_1, k_2, \dots, k_i}$
+\subsection{Find $\vert S^2_n\vert$}
+We'll define $f: S_n \to S_n$ by $\pi \mapsto \pi (23)$, notice that $f^2 = id$ since exchanging the same 2 indices twice returns the original permutations. Therefore f is bijective. Now notice that if $\pi \in S^2_n$ then $f(\pi) \notin S^2_n$ and viceversa because it changes the order between the 2nd and 3rd indices. We now get $Im(S^2_n) =  S_n \setminus S^2_n$. Alltogether we get that $\vert S^2_n \vert = \vert\frac{S_n}{2} \vert = \frac{n!}{2}$. 
+\subsection{Find $\vert S^{1,2}_n \vert$}
+The solution is very similar to the previous solution.order all permutations in $S_n \setminus {id}$ - $\{\pi_1, \dots , \pi_{3!-1}\}$. Now define $f_i: S_n \to S_n$ where $\pi \mapsto \pi \cdot {\pi}_i$. Similarly we get that $f_{\pi_i}$ is bijective since $f^{deg(\pi_i)}_{\pi_i} = id$ and we get that $\vert S^2_n\vert = \vert f_i{[S^2_n]} \vert$ for each $f_i$. Additionaly we have $S^2_n \uplus f_1{[S^2_n]} \uplus \dots \uplus f_{3!-1}{[S^2_n]} = S_n$ since the first 3 indices describes some permutaion from $S_3$, also the sets in the union don't intersect since each set have non-intersecting structures for the first 3 indices in their permutations. Alltogether $\vert S^{1,2}_n \vert = \frac{\vert S_n \vert}{3!}= \frac{\vert S_n\vert }{6}$.(Notice that we can exchange the number 3 for any $k \leq n$ to get a solution for $ \vert S^{1,2,\dots,k}_n \vert$)
+\subsection{How Many Permutations In $S_n$ Have One And Only One Descent}
+In order to calculate how many such permutations in $S_n$ we will calculate how many permutations that have a descent in only one index in $\{1,2,\dots,n-1\}$ and sum for all options.
+\\
+\\
+For $k \in \{1,2, \dots, n-1\}$ we will find how many permutations have only one descent - in k. After the descent we get an Ascending series of n-k numbers from $\{1,2,\dots, n\}$ including the descent number, and before the descent we get an ascending series of k numbers. If we permute any of the numbers in either series then the permutation will not have only one descent - so for all picks of n-k numbers from $\{1,2,\dots,n\}$ we get at most one permutation that has one descent where the last n-k indices hold the values of the chosen numbers. The only time where we don't get a permutation from the choice is if we chose $\{k+1,\dots,n\}$
+to be those n-k numbers since we then get that there's no descent in k. So the amount of permutations that have only one descent (in the k-th index) is ${k\choose n}-1$. if we sum for all possible k values we get that alltogether there are $$\sum_{k=1}^{k=n-1}{n\choose k}-1 = \sum_{k=0}^{k=n}{n\choose k}-{n\choose 0}-{n\choose n} - (n-1) = 2^n -n -1$$ such permutations. 
+\subsection{Finding How Many Permutations Have Only $\{k_1,...,k_n\}$ As The Set Of Their Descents For Any Index Set $\{k_1,k_2,...,k_i\}$.}. \\ 
+First we will define some interesting divisions of permutations to sets that are closely related to our question.\\ \\
+We define a function \textbf{Und}$: \mathcal{P}([n-1]) \rightarrow \mathcal{P}(S_n)$ where a set of indices gives the set of permutations whose set of descents are contained in the given set.\\ \\ Now define \textbf{und}$: \mathcal{P}([n-1]) \rightarrow [n!]$ where und(U)=$\vert Und(U) \vert$. \\ \\ Similarly we define \textbf{Exac}$: \mathcal{P}([n-1]) \rightarrow \mathcal{P}(S_n)$ to be the function that takes a set of indices to the set of permutations whose descents are \textbf{exactly} the given set. And \textbf{exac}$: \mathcal{P}([n-1]) \rightarrow [n!]$ where $exac(U)=\vert Exac(U)\vert$. \\ \\
+In this problem we are looking for an equation that finds exec(U) for all set's of possible indices.
+Notice that for a set of indices $U \subseteq [n-1], Und(U) = \dot\cup_{T\subseteq U} Exac(T)$. Therefore for given U we get $und(U)=\vert Und(U)\vert = \sum_{T\subseteq U} exac(T).$ \\ \\ Using inclusion-exclusion we can get the following equation \[exac(U)=\sum_{T\subseteq U} (-1)^{\vert U\vert - \vert T\vert} und(T).\] This works since we have the equation for und(U), and to get exec(U) we can subtract all $und(U\setminus \{k_i\})$ for $k_i\in U$. This overcorrects and to (partially) fix it we can add $und(U\setminus\{k_i,k_j\}$ for $k_i,k_j \in U$, we can continue and what we get has to be exactly exec(U). (Explanation for using inclusion exclusion.)
+\\ \\
+\textbf{Finding und(U) And ,In Turn, exac(U):}
+\\ \\
+In order to find und(U) we count all options where there can't be a descent outside of U. Let's take $U=\{k_1,...,k_m\}$. what this means is that till $k_1$ there cant be a descent so for every pick of the first $k_1$ numbers there is only one option. now we can't have a descent between $k_1$ and $k_2$ and here we also get that for the pick of those $k_2-k_1$ numbers there is only one option but this time we choose numbers from a "bank" with only $n-k_1$ numbers since we already choose $k_1$ numbers. Therefore we get the following equation:
+\[und(U)={n\choose k_1,k_2-k_1,k_3-k_2,...,n-k_m}\]
+\\ \\
+Which means: 
+\[exac(U)=\sum_{1\leq k_1 < k_2 <...< k_m < n} (-1)^{n-m}{n\choose k_1,k_2-k_1,k_3-k_2,...,n-k_m}\]
+\section{Permutations That Avoid Patterns}
+\subsection{Mailmen Mistake Problem}
+First we will introduce the problem. In a neighborhood there is a mailman. One day all the addresses get mixed up and therefore the mailman distributes all the mail in a random way. (Giving all the mail meant for one address to a possibly different address, and each person gets exactly one bundle of mail.) Whats the probability that no one get his piece of mail.
+\\
+\subsubsection{Permutations That avoid $\sigma (i)=i$}
+The problem is to find a formula to calculate how many permutations $\sigma \in S_n$ have for all $i \in [n]:  \sigma(i) \neq i$. We will solve this using the idea of inclusion-exclusion. First we will define the natural sets for using inclusion-exclusion. \\ \\
+\textbf{Definition:}
+$A_i=\{\sigma \in S_n\mid\sigma(i)=i\},D=\vert \{\sigma \in S_n\mid \forall i \in [n]: \sigma(i) \neq i\} \vert$.\\
+Our problem is to find $\vert D\vert$, To find this value we can use our definitions of $A_i$ and inclusion-exclusion.\\ \\ we get that \[\vert D\vert = \sum_{k=0}^{n} (-1)^{k}\sum_{1\leq i_1<  i_2 <...< i_k\leq n} \vert\{A_{i_1} \cap...\cap A_{i_k}\}\vert \]. 
+Now we shall calculate \[\sum_{1\leq i_1<  i_2 <...< i_k\leq n} \vert\{A_{i_1} \cap...\cap A_{i_k}\}\vert\].
+To do this we must first calculate $\vert\{A_{i_1} \cap...\cap A_{i_k}\}\vert$ for any choice of $i_1,...,i_k$.\\
+Any permutation $\sigma \in A_{i_1}\cap...\cap A_{i_k}$ is set by the order of n-k numbers since k numbers are already set in desired position therefore $\vert A_{i_1}\cap ...\cap A_{i_k}\vert = (n-k)!$. Additionally because our above sum is a sum of constants, that is $\binom{n}{k}$ long (the number of options to pick k indices out of n). therefore: 
+\[\sum_{1\leq i_1<  i_2 <...< i_k\leq n} \vert\{A_{i_1} \cap...\cap A_{i_k}\}\vert = (n-k)! \binom{n}{k} = \frac{n!}{k!}\]Alltogether: 
+\[\vert D \vert = \sum_{k=0}^{n} (-1)^k \cdot\frac{n!}{k!}\]
+\subsection{Application For Permutations Avoiding Fixed Points:}
+Now we can proceed to solve our initial problem. We can create an ordering on the houses in the neighborhood - $[n]$.
+For each permutation you can create a distribution of mail that is equivalent to it by considering where each person's mail goes.Now asking how many ways a mailman can totally incorrectly deliver mail is the same question as asking how many permutations $\sigma\in S_n$, where n is the amount of houses, where for all $i \in [n]: \sigma(i) \neq i$. We have exactly found this amount in the above question - $\sum_{k=0}^{n} (-1)^k \cdot\frac{n!}{k!}.$ Now in $S_n$ we have n! permutations so the probability is taking the amount and dividing by n!. In conclusion we get the following probability: \[\frac{{\sum_{k=0}^{n} (-1)^k \cdot \frac{n!}{k!}}}{n!}= \sum_{k=0}^{n} \frac{(-1)^k}{k!}\] We can approximate this using the series expansion for $e^x$:
+\[\sum_{k=0}^{n} \frac{(-1)^k}{k!} \approx \sum_{k=0}^{\infty} \frac{(-1)^k}{k!} = e^{-1}\]. 
+In conclusion we get that the probability for the mailman to mistake all addresses tends to $e^{-1}$.
+\end{document}
+
+
+
+
